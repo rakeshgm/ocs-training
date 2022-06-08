@@ -15,9 +15,9 @@ The intent of this guide is to detail the `Metro Disaster Recovery` (Metro DR) s
 
 The persistent storage for applications will be provided by an external *Red Hat Ceph Storage* (RHCS) cluster stretched between the two locations with the OCP instances connected to this storage cluster. An arbiter node with a storage monitor service will be required at a third location (different location than where OCP instances are deployed) to establish quorum for the RHCS cluster in the case of a site outage. This third location does not have distance limitations and can be 100+ RTT latency from the storage cluster connected to the OCP instances. 
 
-This is a general overview of the Metro DR steps required to configure and execute `OpenShift Disaster Recovery` (ODR) capabilities using OpenShift Data Foundation (ODF) *v4.10* and `RHACM` *v2.4* across two distinct OCP clusters separated by distance. In addition to these two cluster called `managed` clusters, there is currently a requirement to have a third OCP cluster that will be the `Advanced Cluster Management` (ACM) `hub` cluster.
+This is a general overview of the Metro DR steps required to configure and execute `OpenShift Disaster Recovery` (ODR) capabilities using OpenShift Data Foundation (ODF) *v4.11* and `RHACM` *v2.5* across two distinct OCP clusters separated by distance. In addition to these two cluster called `managed` clusters, there is currently a requirement to have a third OCP cluster that will be the `Advanced Cluster Management` (ACM) `hub` cluster.
 
-NOTE: These steps are considered Development Preview in ODF 4.10 and are provided for POC (Proof of Concept) purposes. OpenShift `Metro DR` will be supported for production usage in a future ODF release.
+NOTE: These steps are considered Development Preview in ODF 4.11 and are provided for POC (Proof of Concept) purposes. OpenShift `Metro DR` will be supported for production usage in a future ODF release.
 
 [start=1]
 . *Install the ACM operator on the hub cluster.* +
@@ -26,8 +26,8 @@ After creating the OCP hub cluster, install from OperatorHub the ACM operator. A
 Import or create the two managed clusters with adequate resources for ODF (compute nodes, memory, cpu) using the RHACM console.
 . *Install Red Hat Ceph Storage Stretch Cluster With Arbiter.* +
 Properly set up a Ceph cluster deployed on two different datacenters using the stretched mode functionality.
-. *Install ODF 4.10 on managed clusters.* +
-Install ODF 4.10 on primary and secondary OCP managed clusters and connect both instances to the stretched Ceph cluster.
+. *Install ODF 4.11 on managed clusters.* +
+Install ODF 4.11 on primary and secondary OCP managed clusters and connect both instances to the stretched Ceph cluster.
 . *Install ODR Hub Operator on the ACM hub cluster.* +
 Install from OperatorHub on the ACM hub cluster the ODR Hub Operator.
 . *Configure SSL access between managed clusters if (if needed).* +
@@ -144,7 +144,7 @@ python3 ceph-external-cluster-details-exporter.py --help
 ----
 
 To know more about the External ODF deployment options, see
-https://access.redhat.com/documentation/en-us/red_hat_openshift_data_foundation/4.10/html-single/deploying_openshift_data_foundation_in_external_mode/index#overview-of-deploying-in-external-mode_rhodf[ODF external mode deployment.]
+https://access.redhat.com/documentation/en-us/red_hat_openshift_data_foundation/4.11/html-single/deploying_openshift_data_foundation_in_external_mode/index#overview-of-deploying-in-external-mode_rhodf[ODF external mode deployment.]
 
 At a minimum, we need to use the following three flags with the
 ceph-external-cluster-details-exporter.py script:
@@ -647,8 +647,8 @@ data:
       deploymentAutomationEnabled: true  ## <-- Modify to true if needed
       catalogSourceName: redhat-operators
       catalogSourceNamespaceName: openshift-marketplace
-      channelName: stable-4.10
-      clusterServiceVersionName: odr-cluster-operator.v4.10.0
+      channelName: stable-4.11
+      clusterServiceVersionName: odr-cluster-operator.v4.11.0
       namespaceName: openshift-dr-system
       packageName: odr-cluster-operator
 [...]
@@ -663,7 +663,7 @@ oc get csv,pod -n openshift-dr-system
 .Example output.
 ----
 NAME                                                                      DISPLAY                         VERSION   REPLACES   PHASE
-clusterserviceversion.operators.coreos.com/odr-cluster-operator.v4.10.0   Openshift DR Cluster Operator   4.10.0               Succeeded
+clusterserviceversion.operators.coreos.com/odr-cluster-operator.v4.11.0   Openshift DR Cluster Operator   4.11.0               Succeeded
 
 NAME                                             READY   STATUS    RESTARTS   AGE
 pod/ramen-dr-cluster-operator-5564f9d669-f6lbc   2/2     Running   0          5m32s
